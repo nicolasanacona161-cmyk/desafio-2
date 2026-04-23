@@ -2,23 +2,33 @@
 #define EQUIPO_H
 
 #include <iostream>
-#include <string>
 #include "Jugador.h"
-#include "EstadisticaHistorica.h"
 
 class Equipo {
 private:
-    char* nombre;
-    int ranking;
+    char* pais;
+    char* confederacion;
+    int rankingFIFA;
     Jugador** plantilla;
-    int cantJugadores;
-    int capacidadPlantilla;
-    EstadisticaHistorica stats;
+    int cantidadJugadores;
 
-    void liberarNombre();
+    int puntosGrupo;
+    int golesFavorGrupo;
+    int golesContraGrupo;
+
+    int golesFavorHistoricos;
+    int golesContraHistoricos;
+    int partidosGanadosHistoricos;
+    int partidosEmpatadosHistoricos;
+    int partidosPerdidosHistoricos;
+    int tarjetasAmarillasHistoricas;
+    int tarjetasRojasHistoricas;
+    int faltasHistoricas;
+
+    void liberarCadena(char*& texto);
     void liberarPlantilla();
     void copiarDesde(const Equipo& otro);
-    void redimensionarPlantilla(int nuevaCapacidad);
+    void copiarCadena(char*& destino, const char* origen);
 
 public:
     Equipo();
@@ -26,21 +36,36 @@ public:
     Equipo& operator=(const Equipo& otro);
     ~Equipo();
 
-    void configurar(const std::string& nombreEquipo, int rankingEquipo, int cantidadJugadores = 26);
-    void configurar(const char* nombreEquipo, int rankingEquipo, int cantidadJugadores = 26);
-    void agregarJugador(const std::string& nombreJugador, int dorsal);
-    void registrarResultado(int golesFavor, int golesContra);
+    void configurar(const char* paisEquipo,
+                    const char* confederacionEquipo,
+                    int rankingEquipo,
+                    int gfHistoricos,
+                    int gcHistoricos,
+                    int ganados,
+                    int empatados,
+                    int perdidos);
+    void crearPlantillaArtificial(int cantidad = 26);
+    void registrarResultadoGrupo(int golesFavor, int golesContra);
+    void registrarResultadoHistorico(int golesFavor, int golesContra);
+    void registrarDisciplinaHistorica(int amarillas, int rojas, int faltasCometidas);
     void resetDatosGrupo();
 
-    const char* getNombre() const;
-    int getRanking() const;
+    const char* getPais() const;
+    const char* getConfederacion() const;
+    int getRankingFIFA() const;
     int getPuntosGrupo() const;
     int getDiferenciaGoles() const;
     int getGolesFavor() const;
-    int getCantJugadores() const;
+    int getGolesContraGrupo() const;
+    int getGolesFavorHistoricos() const;
+    int getGolesContraHistoricos() const;
+    int getPartidosHistoricos() const;
+    double getPromedioGolesFavor() const;
+    double getPromedioGolesContra() const;
+    int getCantidadJugadores() const;
     Jugador* getJugador(int idx) const;
 
-    bool operator>(const Equipo& otro);
+    bool operator>(const Equipo& otro) const;
     friend std::ostream& operator<<(std::ostream& os, const Equipo& e);
 };
 
