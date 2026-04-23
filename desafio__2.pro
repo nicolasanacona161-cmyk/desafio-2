@@ -1,7 +1,6 @@
 QT -= gui
 
 TEMPLATE = lib
-DEFINES += DESAFIO__2_LIBRARY
 
 CONFIG += c++17
 
@@ -15,7 +14,6 @@ SOURCES += \
     jugador.cpp
 
 HEADERS += \
-    desafio__2_global.h \
     desafio__2.h \
     equipo.h \
     jugador.h
