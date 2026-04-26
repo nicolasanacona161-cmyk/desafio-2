@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <iostream>
 
+using namespace std;
+
 Partido::Partido()
     : fecha(),
       equipo1(nullptr),
@@ -225,43 +227,43 @@ const Fecha& Partido::getFecha() const { return fecha; }
 bool Partido::getHuboProrroga() const { return huboProrroga; }
 
 void Partido::imprimirResumen() const {
-    std::cout << fecha << " " << hora
-              << " | Sede: " << sede
-              << " | Arbitros: " << arbitros[0] << ", " << arbitros[1] << ", " << arbitros[2]
-              << " | " << equipo1->getPais() << " " << goles1 << " - " << goles2
-              << " " << equipo2->getPais()
-              << " | Posesion: " << std::fixed << std::setprecision(1)
-              << posesion1 << "% - " << posesion2 << "%";
+    cout << fecha << " " << hora
+         << " | Sede: " << sede
+         << " | Arbitros: " << arbitros[0] << ", " << arbitros[1] << ", " << arbitros[2]
+         << " | " << equipo1->getPais() << " " << goles1 << " - " << goles2
+         << " " << equipo2->getPais()
+         << " | Posesion: " << std::fixed << std::setprecision(1)
+         << posesion1 << "% - " << posesion2 << "%";
     if (huboProrroga) {
-        std::cout << " | Prorroga";
+        cout << " | Prorroga";
     }
-    std::cout << "\n";
+    cout << "\n";
 }
 
 void Partido::imprimirGoleadores() const {
-    std::cout << "  Goleadores " << equipo1->getPais() << ": ";
+    cout << "  Goleadores " << equipo1->getPais() << ": ";
     bool alguno = false;
     for (int i = 0; i < 11; ++i) {
         for (int g = 0; g < convocados1[i].getGoles(); ++g) {
-            std::cout << convocados1[i].getJugador()->getNumeroCamiseta() << " ";
+            cout << convocados1[i].getJugador()->getNumeroCamiseta() << " ";
             alguno = true;
         }
     }
     if (!alguno) {
-        std::cout << "sin goles";
+        cout << "sin goles";
     }
-    std::cout << "\n";
+    cout << "\n";
 
-    std::cout << "  Goleadores " << equipo2->getPais() << ": ";
+    cout << "  Goleadores " << equipo2->getPais() << ": ";
     alguno = false;
     for (int i = 0; i < 11; ++i) {
         for (int g = 0; g < convocados2[i].getGoles(); ++g) {
-            std::cout << convocados2[i].getJugador()->getNumeroCamiseta() << " ";
+            cout << convocados2[i].getJugador()->getNumeroCamiseta() << " ";
             alguno = true;
         }
     }
     if (!alguno) {
-        std::cout << "sin goles";
+        cout << "sin goles";
     }
-    std::cout << "\n";
+    cout << "\n";
 }
