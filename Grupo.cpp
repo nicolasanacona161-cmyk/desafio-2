@@ -2,6 +2,8 @@
 #include <cstring>
 #include <iostream>
 
+using namespace std;
+
 Grupo::Grupo() : letra('?'), equipos(new Equipo*[4]), cantidadEquipos(0) {
     for (int i = 0; i < 4; ++i) {
         equipos[i] = nullptr;
@@ -81,11 +83,11 @@ Equipo* Grupo::getEquipo(int idx) const {
 int Grupo::getCantidadEquipos() const { return cantidadEquipos; }
 
 void Grupo::imprimirTabla() const {
-    std::cout << "Tabla grupo " << letra << ":\n";
+    cout << "Tabla grupo " << letra << ":\n";
     for (int i = 0; i < cantidadEquipos; ++i) {
-        std::cout << "  " << (i + 1) << ". " << equipos[i]->getPais()
-                  << " | Pts: " << equipos[i]->getPuntosGrupo()
-                  << " | DG: " << equipos[i]->getDiferenciaGoles()
-                  << " | GF: " << equipos[i]->getGolesFavor() << "\n";
+        cout << "  " << (i + 1) << ". " << equipos[i]->getPais()
+             << " | Pts: " << equipos[i]->getPuntosGrupo()
+             << " | DG: " << equipos[i]->getDiferenciaGoles()
+             << " | GF: " << equipos[i]->getGolesFavor() << "\n";
     }
 }
