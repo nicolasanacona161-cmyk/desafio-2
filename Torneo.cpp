@@ -5,6 +5,8 @@
 #include <fstream>
 #include <iostream>
 
+using namespace std;
+
 namespace {
 const char* ARCHIVO_EQUIPOS = "txt/selecciones_clasificadas_mundial.csv";
 const char* ARCHIVO_EQUIPOS_ALT = "../../txt/selecciones_clasificadas_mundial.csv";
@@ -480,7 +482,7 @@ void Torneo::cargarEquiposDesdeCSV() {
 void Torneo::cargarOActualizarDatos() {
     monitor.reset();
     cargarEquiposDesdeCSV();
-    std::cout << "\nDatos historicos cargados correctamente.\n";
+    cout << "\nDatos historicos cargados correctamente.\n";
 }
 
 void Torneo::crearBombos(Equipo*** bombos) {
@@ -577,19 +579,19 @@ void Torneo::conformarGrupos() {
     gruposConformados = logrado;
 
     if (!gruposConformados) {
-        std::cout << "\nNo fue posible conformar grupos.\n";
+        cout << "\nNo fue posible conformar grupos.\n";
         return;
     }
 
-    std::cout << "\n=== GRUPOS CONFORMADOS ===\n";
+    cout << "\n=== GRUPOS CONFORMADOS ===\n";
     mostrarGrupos();
 }
 
 void Torneo::mostrarGrupos() const {
     for (int i = 0; i < 12; ++i) {
-        std::cout << "Grupo " << grupos[i]->getLetra() << ":\n";
+        cout << "Grupo " << grupos[i]->getLetra() << ":\n";
         for (int j = 0; j < grupos[i]->getCantidadEquipos(); ++j) {
-            std::cout << "  - " << *grupos[i]->getEquipo(j) << "\n";
+            cout << "  - " << *grupos[i]->getEquipo(j) << "\n";
         }
     }
 }
@@ -675,7 +677,7 @@ void Torneo::simularFaseDeGrupos() {
 
     generarCalendarioFaseDeGrupos();
 
-    std::cout << "\n=== FASE DE GRUPOS ===\n";
+    cout << "\n=== FASE DE GRUPOS ===\n";
     for (int i = 0; i < 72; ++i) {
         partidosGrupos[i]->simular(false, true);
         partidosGrupos[i]->imprimirResumen();
@@ -683,7 +685,7 @@ void Torneo::simularFaseDeGrupos() {
         monitor.registrarIteracion(1);
     }
 
-    std::cout << "\n=== TABLAS DE CLASIFICACION ===\n";
+    cout << "\n=== TABLAS DE CLASIFICACION ===\n";
     for (int i = 0; i < 12; ++i) {
         grupos[i]->ordenarTabla();
         grupos[i]->imprimirTabla();
@@ -822,7 +824,7 @@ void Torneo::configurarDieciseisavos() {
 
     repararCrucesDieciseisavos();
 
-    std::cout << "\n=== PARTIDOS CONFIGURADOS PARA DIECISEISAVOS ===\n";
+    cout << "\n=== PARTIDOS CONFIGURADOS PARA DIECISEISAVOS ===\n";
     for (int i = 0; i < 16; ++i) {
         partidosDieciseisavos[i]->imprimirResumen();
     }
@@ -873,7 +875,7 @@ void Torneo::simularEliminatorias() {
 
     configurarDieciseisavos();
 
-    std::cout << "\n=== DIECISEISAVOS DE FINAL ===\n";
+    cout << "\n=== DIECISEISAVOS DE FINAL ===\n";
     for (int i = 0; i < 16; ++i) {
         partidosDieciseisavos[i]->simular(true, false);
         partidosDieciseisavos[i]->imprimirResumen();
@@ -890,7 +892,7 @@ void Torneo::simularEliminatorias() {
                                        partidosDieciseisavos[i * 2 + 1]->getGanador());
     }
 
-    std::cout << "\n=== OCTAVOS DE FINAL ===\n";
+    cout << "\n=== OCTAVOS DE FINAL ===\n";
     for (int i = 0; i < 8; ++i) {
         partidosOctavos[i]->simular(true, false);
         partidosOctavos[i]->imprimirResumen();
@@ -906,7 +908,7 @@ void Torneo::simularEliminatorias() {
                                        partidosOctavos[i * 2 + 1]->getGanador());
     }
 
-    std::cout << "\n=== CUARTOS DE FINAL ===\n";
+    cout << "\n=== CUARTOS DE FINAL ===\n";
     for (int i = 0; i < 4; ++i) {
         partidosCuartos[i]->simular(true, false);
         partidosCuartos[i]->imprimirResumen();
@@ -922,7 +924,7 @@ void Torneo::simularEliminatorias() {
                                            partidosCuartos[i * 2 + 1]->getGanador());
     }
 
-    std::cout << "\n=== SEMIFINALES ===\n";
+    cout << "\n=== SEMIFINALES ===\n";
     for (int i = 0; i < 2; ++i) {
         partidosSemifinales[i]->simular(true, false);
         partidosSemifinales[i]->imprimirResumen();
@@ -934,7 +936,7 @@ void Torneo::simularEliminatorias() {
     partidoTercerPuesto->configurar(fechaEliminacion,
                                     partidosSemifinales[0]->getPerdedor(),
                                     partidosSemifinales[1]->getPerdedor());
-    std::cout << "\n=== TERCER PUESTO ===\n";
+    cout << "\n=== TERCER PUESTO ===\n";
     partidoTercerPuesto->simular(true, false);
     partidoTercerPuesto->imprimirResumen();
     partidoTercerPuesto->imprimirGoleadores();
@@ -944,7 +946,7 @@ void Torneo::simularEliminatorias() {
     partidoFinal->configurar(fechaEliminacion,
                              partidosSemifinales[0]->getGanador(),
                              partidosSemifinales[1]->getGanador());
-    std::cout << "\n=== FINAL ===\n";
+    cout << "\n=== FINAL ===\n";
     partidoFinal->simular(true, false);
     partidoFinal->imprimirResumen();
     partidoFinal->imprimirGoleadores();
@@ -1035,23 +1037,23 @@ void Torneo::mostrarEstadisticasFinales() const {
         partidosSemifinales[1]->getEquipo2()
     };
 
-    std::cout << "\n=== ESTADISTICAS FINALES DEL TORNEO ===\n";
-    std::cout << "1. " << campeon->getPais() << "\n";
-    std::cout << "2. " << subcampeon->getPais() << "\n";
-    std::cout << "3. " << tercero->getPais() << "\n";
-    std::cout << "4. " << cuarto->getPais() << "\n";
-    std::cout << "Maximo goleador del campeon: "
-              << goleadorCampeon->getNombre() << " " << goleadorCampeon->getApellido()
-              << " (" << goleadorCampeon->getGolesEnCopa() << ")\n";
-    std::cout << "Top 3 goleadores de la copa:\n";
-    if (top1 != nullptr) std::cout << "  - " << top1->getNombre() << " " << top1->getApellido() << " | " << top1->getGolesEnCopa() << "\n";
-    if (top2 != nullptr) std::cout << "  - " << top2->getNombre() << " " << top2->getApellido() << " | " << top2->getGolesEnCopa() << "\n";
-    if (top3 != nullptr) std::cout << "  - " << top3->getNombre() << " " << top3->getApellido() << " | " << top3->getGolesEnCopa() << "\n";
-    std::cout << "Equipo con mas goles historicos actualizados: " << maximoHistorico->getPais()
-              << " (" << maximoHistorico->getGolesFavorHistoricos() << ")\n";
-    std::cout << "Confederacion con mayor presencia en R16: " << confederacionConMayorPresencia(equiposR16, 32) << "\n";
-    std::cout << "Confederacion con mayor presencia en R8: " << confederacionConMayorPresencia(equiposR8, 16) << "\n";
-    std::cout << "Confederacion con mayor presencia en R4: " << confederacionConMayorPresencia(equiposR4, 4) << "\n";
+    cout << "\n=== ESTADISTICAS FINALES DEL TORNEO ===\n";
+    cout << "1. " << campeon->getPais() << "\n";
+    cout << "2. " << subcampeon->getPais() << "\n";
+    cout << "3. " << tercero->getPais() << "\n";
+    cout << "4. " << cuarto->getPais() << "\n";
+    cout << "Maximo goleador del campeon: "
+         << goleadorCampeon->getNombre() << " " << goleadorCampeon->getApellido()
+         << " (" << goleadorCampeon->getGolesEnCopa() << ")\n";
+    cout << "Top 3 goleadores de la copa:\n";
+    if (top1 != nullptr) cout << "  - " << top1->getNombre() << " " << top1->getApellido() << " | " << top1->getGolesEnCopa() << "\n";
+    if (top2 != nullptr) cout << "  - " << top2->getNombre() << " " << top2->getApellido() << " | " << top2->getGolesEnCopa() << "\n";
+    if (top3 != nullptr) cout << "  - " << top3->getNombre() << " " << top3->getApellido() << " | " << top3->getGolesEnCopa() << "\n";
+    cout << "Equipo con mas goles historicos actualizados: " << maximoHistorico->getPais()
+         << " (" << maximoHistorico->getGolesFavorHistoricos() << ")\n";
+    cout << "Confederacion con mayor presencia en R16: " << confederacionConMayorPresencia(equiposR16, 32) << "\n";
+    cout << "Confederacion con mayor presencia en R8: " << confederacionConMayorPresencia(equiposR8, 16) << "\n";
+    cout << "Confederacion con mayor presencia en R4: " << confederacionConMayorPresencia(equiposR4, 4) << "\n";
 }
 
 void Torneo::guardarJugadoresActualizados() const {
@@ -1085,25 +1087,25 @@ void Torneo::mostrarReporteEficiencia() const {
     stackEstimado += static_cast<long long>(sizeof(bool) * 48);
     stackEstimado += static_cast<long long>(sizeof(int) * 32);
 
-    std::cout << "\n=== REPORTE DE EFICIENCIA ===\n";
-    std::cout << "Iteraciones acumuladas: " << monitor.getIteraciones() << "\n";
-    std::cout << "Memoria heap estimada: " << heapEstimado << " bytes\n";
-    std::cout << "Memoria stack estimada: " << stackEstimado << " bytes\n";
-    std::cout << "Incluye variables locales, arreglos auxiliares y parametros por valor usados en la funcionalidad.\n";
+    cout << "\n=== REPORTE DE EFICIENCIA ===\n";
+    cout << "Iteraciones acumuladas: " << monitor.getIteraciones() << "\n";
+    cout << "Memoria heap estimada: " << heapEstimado << " bytes\n";
+    cout << "Memoria stack estimada: " << stackEstimado << " bytes\n";
+    cout << "Incluye variables locales, arreglos auxiliares y parametros por valor usados en la funcionalidad.\n";
 }
 
 void Torneo::ejecutarMenu() {
     int opcion = -1;
     do {
-        std::cout << "\n===== UdeAWorldCup =====\n";
-        std::cout << "1. Cargar / actualizar datos\n";
-        std::cout << "2. Conformar grupos\n";
-        std::cout << "3. Simular fase de grupos\n";
-        std::cout << "4. Simular torneo completo\n";
-        std::cout << "5. Reporte de eficiencia\n";
-        std::cout << "0. Salir\n";
-        std::cout << "Seleccione una opcion: ";
-        std::cin >> opcion;
+        cout << "\n===== UdeAWorldCup =====\n";
+        cout << "1. Cargar / actualizar datos\n";
+        cout << "2. Conformar grupos\n";
+        cout << "3. Simular fase de grupos\n";
+        cout << "4. Simular torneo completo\n";
+        cout << "5. Reporte de eficiencia\n";
+        cout << "0. Salir\n";
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
 
         switch (opcion) {
         case 1:
@@ -1126,10 +1128,10 @@ void Torneo::ejecutarMenu() {
             mostrarReporteEficiencia();
             break;
         case 0:
-            std::cout << "Saliendo del sistema.\n";
+            cout << "Saliendo del sistema.\n";
             break;
         default:
-            std::cout << "Opcion invalida.\n";
+            cout << "Opcion invalida.\n";
             break;
         }
     } while (opcion != 0);
