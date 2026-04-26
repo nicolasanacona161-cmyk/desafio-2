@@ -1,93 +1,132 @@
-#include "Grupo.h"
-#include <cstring>
+#include "Jugador.h"
 #include <iostream>
 
 using namespace std;
 
-Grupo::Grupo() : letra('?'), equipos(new Equipo*[4]), cantidadEquipos(0) {
-    for (int i = 0; i < 4; ++i) {
-        equipos[i] = nullptr;
+Jugador::Jugador()
+    : nombre(nullptr),
+      apellido(nullptr),
+      numeroCamiseta(0),
+      golesHistoricos(0),
+      partidosJugados(0),
+      tarjetasAmarillas(0),
+      tarjetasRojas(0),
+      faltas(0),
+      minutosJugados(0),
+      asistencias(0),
+      golesEnCopa(0) {
+    copiarCadena(nombre, "");
+    copiarCadena(apellido, "");
+}
+
+Jugador::Jugador(const Jugador& otro)
+    : nombre(nullptr),
+      apellido(nullptr),
+      numeroCamiseta(otro.numeroCamiseta),
+      golesHistoricos(otro.golesHistoricos),
+      partidosJugados(otro.partidosJugados),
+      tarjetasAmarillas(otro.tarjetasAmarillas),
+      tarjetasRojas(otro.tarjetasRojas),
+      faltas(otro.faltas),
+      minutosJugados(otro.minutosJugados),
+      asistencias(otro.asistencias),
+      golesEnCopa(otro.golesEnCopa) {
+    copiarCadena(nombre, otro.nombre != nullptr ? otro.nombre : "");
+    copiarCadena(apellido, otro.apellido != nullptr ? otro.apellido : "");
+}
+
+Jugador& Jugador::operator=(const Jugador& otro) {
+    if (this != &otro) {
+        liberarCadena(nombre);
+        liberarCadena(apellido);
+        copiarCadena(nombre, otro.nombre != nullptr ? otro.nombre : "");
+        copiarCadena(apellido, otro.apellido != nullptr ? otro.apellido : "");
+        numeroCamiseta = otro.numeroCamiseta;
+        golesHistoricos = otro.golesHistoricos;
+        partidosJugados = otro.partidosJugados;
+        tarjetasAmarillas = otro.tarjetasAmarillas;
+        tarjetasRojas = otro.tarjetasRojas;
+        faltas = otro.faltas;
+        minutosJugados = otro.minutosJugados;
+        asistencias = otro.asistencias;
+        golesEnCopa = otro.golesEnCopa;
+    }
+    return *this;
+}
+
+Jugador::~Jugador() {
+    liberarCadena(nombre);
+    liberarCadena(apellido);
+}
+
+void Jugador::liberarCadena(char*& texto) {
+    if (texto != nullptr) {
+        delete[] texto;
+        texto = nullptr;
     }
 }
 
-Grupo::~Grupo() {
-    delete[] equipos;
+void Jugador::copiarCadena(char*& destino, const char* origen) {
+    int tam = 0;
+    while (origen[tam] != '\0') {
+        ++tam;
+    }
+
+    destino = new char[tam + 1];
+    for (int i = 0; i < tam; ++i) {
+        destino[i] = origen[i];
+    }
+    destino[tam] = '\0';
 }
 
-void Grupo::setLetra(char idGrupo) { letra = idGrupo; }
-
-char Grupo::getLetra() const { return letra; }
-
-bool Grupo::puedeAgregarEquipo(Equipo* equipo) const {
-    if (equipo == nullptr || cantidadEquipos >= 4) {
-        return false;
-    }
-
-    int coincidenciasMismaConf = 0;
-    for (int i = 0; i < cantidadEquipos; ++i) {
-        if (std::strcmp(equipos[i]->getConfederacion(), equipo->getConfederacion()) == 0) {
-            ++coincidenciasMismaConf;
-        }
-    }
-
-    if (std::strcmp(equipo->getConfederacion(), "UEFA") == 0) {
-        return coincidenciasMismaConf < 2;
-    }
-    return coincidenciasMismaConf == 0;
+void Jugador::configurar(const char* nombreJugador, const char* apellidoJugador, int dorsalJugador, int golesIniciales) {
+    liberarCadena(nombre);
+    liberarCadena(apellido);
+    copiarCadena(nombre, nombreJugador != nullptr ? nombreJugador : "");
+    copiarCadena(apellido, apellidoJugador != nullptr ? apellidoJugador : "");
+    numeroCamiseta = dorsalJugador;
+    golesHistoricos = golesIniciales;
+    partidosJugados = 0;
+    tarjetasAmarillas = 0;
+    tarjetasRojas = 0;
+    faltas = 0;
+    minutosJugados = 0;
+    asistencias = 0;
+    golesEnCopa = 0;
 }
 
-void Grupo::agregarEquipo(Equipo* equipo) {
-    if (puedeAgregarEquipo(equipo)) {
-        equipos[cantidadEquipos] = equipo;
-        ++cantidadEquipos;
-    }
+const char* Jugador::getNombre() const { return (nombre != nullptr) ? nombre : ""; }
+
+const char* Jugador::getApellido() const { return (apellido != nullptr) ? apellido : ""; }
+
+int Jugador::getNumeroCamiseta() const { return numeroCamiseta; }
+
+int Jugador::getGolesHistoricos() const { return golesHistoricos; }
+
+int Jugador::getGolesEnCopa() const { return golesEnCopa; }
+
+int Jugador::getAsistencias() const { return asistencias; }
+
+void Jugador::sumarGol() {
+    ++golesHistoricos;
+    ++golesEnCopa;
 }
 
-void Grupo::agregarEquipoForzado(Equipo* equipo) {
-    if (equipo != nullptr && cantidadEquipos < 4) {
-        equipos[cantidadEquipos] = equipo;
-        ++cantidadEquipos;
-    }
-}
+void Jugador::sumarPartido() { ++partidosJugados; }
 
-void Grupo::quitarUltimoEquipo() {
-    if (cantidadEquipos > 0) {
-        --cantidadEquipos;
-        equipos[cantidadEquipos] = nullptr;
-    }
-}
+void Jugador::sumarMinutos(int minutos) { minutosJugados += minutos; }
 
-void Grupo::intercambiarEquipos(int a, int b) {
-    Equipo* temporal = equipos[a];
-    equipos[a] = equipos[b];
-    equipos[b] = temporal;
-}
+void Jugador::sumarAmarilla() { ++tarjetasAmarillas; }
 
-void Grupo::ordenarTabla() {
-    for (int i = 0; i < cantidadEquipos - 1; ++i) {
-        for (int j = 0; j < cantidadEquipos - i - 1; ++j) {
-            if (!((*equipos[j]) > (*equipos[j + 1]))) {
-                intercambiarEquipos(j, j + 1);
-            }
-        }
-    }
-}
+void Jugador::sumarRoja() { ++tarjetasRojas; }
 
-Equipo* Grupo::getEquipo(int idx) const {
-    if (idx < 0 || idx >= cantidadEquipos) {
-        return nullptr;
-    }
-    return equipos[idx];
-}
+void Jugador::sumarFalta() { ++faltas; }
 
-int Grupo::getCantidadEquipos() const { return cantidadEquipos; }
+void Jugador::sumarAsistencia() { ++asistencias; }
 
-void Grupo::imprimirTabla() const {
-    cout << "Tabla grupo " << letra << ":\n";
-    for (int i = 0; i < cantidadEquipos; ++i) {
-        cout << "  " << (i + 1) << ". " << equipos[i]->getPais()
-             << " | Pts: " << equipos[i]->getPuntosGrupo()
-             << " | DG: " << equipos[i]->getDiferenciaGoles()
-             << " | GF: " << equipos[i]->getGolesFavor() << "\n";
-    }
+void Jugador::imprimir() const {
+    cout << numeroCamiseta << " - " << getNombre() << " " << getApellido()
+         << " | Goles hist: " << golesHistoricos
+         << " | Asistencias: " << asistencias
+         << " | Goles copa: " << golesEnCopa << "\n";
 }
