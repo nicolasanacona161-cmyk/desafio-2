@@ -80,3 +80,9 @@ CMakeLists.txt.user*
 .rcc/
 .uic/
 /build*/
+.qtcreator/
+.vscode/
+
+# Local helper files
+guide_content.txt
+read_docx.py
